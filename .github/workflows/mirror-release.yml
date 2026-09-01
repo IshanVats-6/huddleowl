@@ -11,7 +11,7 @@
 # GITHUB_TOKEN cannot do, so it uses a token you create:
 #
 #   1. github.com/settings/personal-access-tokens/new
-#   2. Repository access: Only select repositories, and pick IshanVats-6/huddleowl
+#   2. Repository access: Only select repositories, and pick IshanVats-6/huddleowl-app
 #   3. Permissions: Contents, Read-only. Nothing else.
 #   4. Save it in THIS repository under Settings, Secrets and variables,
 #      Actions, as APP_REPO_TOKEN.
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       V: ${{ inputs.version }}
-      SOURCE_REPO: IshanVats-6/huddleowl
+      SOURCE_REPO: IshanVats-6/huddleowl-app
 
     steps:
       - uses: actions/checkout@v4

@@ -19,9 +19,9 @@ No bot joins the call. No account, no sign up. On a Mac with the on-device model
 
 <br/>
 
-### [&nbsp;&nbsp;**DOWNLOAD FOR MAC**&nbsp;&nbsp;](https://github.com/IshanVats-6/huddleowl-downloads/releases/download/v0.1.9/HuddleOwl-0.1.9-arm64.dmg)
+### [&nbsp;&nbsp;**DOWNLOAD FOR MAC**&nbsp;&nbsp;](https://github.com/IshanVats-6/huddleowl/releases/download/v0.1.9/HuddleOwl-0.1.9-arm64.dmg)
 
-<sub>Apple Silicon, 164 MB&nbsp; · &nbsp;[Intel Mac](https://github.com/IshanVats-6/huddleowl-downloads/releases/download/v0.1.9/HuddleOwl-0.1.9.dmg)&nbsp; · &nbsp;[Windows](https://github.com/IshanVats-6/huddleowl-downloads/releases/download/v0.1.9/HuddleOwl-0.1.9-win-x64.exe)&nbsp; · &nbsp;[All files and checksums](https://github.com/IshanVats-6/huddleowl-downloads/releases/latest)</sub>
+<sub>Apple Silicon, 164 MB&nbsp; · &nbsp;[Intel Mac](https://github.com/IshanVats-6/huddleowl/releases/download/v0.1.9/HuddleOwl-0.1.9.dmg)&nbsp; · &nbsp;[Windows](https://github.com/IshanVats-6/huddleowl/releases/download/v0.1.9/HuddleOwl-0.1.9-win-x64.exe)&nbsp; · &nbsp;[All files and checksums](https://github.com/IshanVats-6/huddleowl/releases/latest)</sub>
 
 <br/>
 
