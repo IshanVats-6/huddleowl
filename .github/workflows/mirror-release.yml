@@ -1,5 +1,6 @@
 # Copies a finished build out of the private application repository and
-# publishes it here, where the website's download buttons can reach it.
+# publishes it here, where the website's download buttons and this repository's
+# README can reach it.
 #
 # WHY A WORKFLOW RATHER THAN A MANUAL UPLOAD. The installers are about 470 MB
 # together. Doing this by hand means downloading all of it and uploading all of
@@ -46,8 +47,13 @@ jobs:
     env:
       V: ${{ inputs.version }}
       SOURCE_REPO: IshanVats-6/huddleowl
+      # Downloads live outside the checkout, so a half-finished run can never
+      # leave 470 MB of installers staged for commit.
+      OUT: ${{ runner.temp }}/out
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Fetch the installers from the app repo
         env:
           GH_TOKEN: ${{ secrets.APP_REPO_TOKEN }}
@@ -57,10 +63,10 @@ jobs:
             echo "::error::APP_REPO_TOKEN is not set. See the setup notes at the top of this workflow."
             exit 1
           fi
-          mkdir -p out
+          mkdir -p "$OUT"
           gh release download "${{ inputs.source_tag }}" \
             --repo "$SOURCE_REPO" \
-            --dir out \
+            --dir "$OUT" \
             --pattern "HuddleOwl-$V-arm64.dmg" \
             --pattern "HuddleOwl-$V.dmg" \
             --pattern "HuddleOwl-$V-win-x64.exe"
@@ -68,40 +74,51 @@ jobs:
       - name: Check all three arrived
         run: |
           set -euo pipefail
-          cd out
           missing=0
           for f in "HuddleOwl-$V-arm64.dmg" "HuddleOwl-$V.dmg" "HuddleOwl-$V-win-x64.exe"; do
-            if [ ! -s "$f" ]; then
+            if [ ! -s "$OUT/$f" ]; then
               echo "::error::$f is missing or empty in $SOURCE_REPO at ${{ inputs.source_tag }}"
               missing=1
             fi
           done
-          # A partial release is worse than none: the website would offer three
-          # buttons and one of them would 404.
+          # A partial release is worse than none: the website and the README
+          # would each offer three downloads and one of them would 404.
           exit $missing
 
       - name: Write the checksums
         run: |
           set -euo pipefail
-          cd out
+          cd "$OUT"
           sha256sum "HuddleOwl-$V-arm64.dmg" "HuddleOwl-$V.dmg" "HuddleOwl-$V-win-x64.exe" > SHA256SUMS.txt
           cat SHA256SUMS.txt
 
-      - name: Write the release notes
+      - name: Measure the files
+        id: sizes
         run: |
           set -euo pipefail
-          size() { du -m "out/$1" | cut -f1; }
-          cat > notes.md <<EOF
+          {
+            echo "arm=$(du -m "$OUT/HuddleOwl-$V-arm64.dmg" | cut -f1)"
+            echo "intel=$(du -m "$OUT/HuddleOwl-$V.dmg" | cut -f1)"
+            echo "win=$(du -m "$OUT/HuddleOwl-$V-win-x64.exe" | cut -f1)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Write the release notes
+        env:
+          ARM: ${{ steps.sizes.outputs.arm }}
+          INTEL: ${{ steps.sizes.outputs.intel }}
+          WIN: ${{ steps.sizes.outputs.win }}
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/notes.md" <<EOF
           HuddleOwl $V, for macOS and Windows.
 
-          Free for individuals. No account, no card, no sign up. The download buttons on
-          [huddleowl.com](https://huddleowl.com) point here.
+          Free for individuals. No account, no card, no sign up.
 
           | File | Platform | Size |
           |---|---|---|
-          | \`HuddleOwl-$V-arm64.dmg\` | Apple Silicon Mac, macOS 11+ | $(size "HuddleOwl-$V-arm64.dmg") MB |
-          | \`HuddleOwl-$V.dmg\` | Intel Mac, macOS 11+ | $(size "HuddleOwl-$V.dmg") MB |
-          | \`HuddleOwl-$V-win-x64.exe\` | Windows 10 and 11, x64 | $(size "HuddleOwl-$V-win-x64.exe") MB |
+          | \`HuddleOwl-$V-arm64.dmg\` | Apple Silicon Mac, macOS 11+ | $ARM MB |
+          | \`HuddleOwl-$V.dmg\` | Intel Mac, macOS 11+ | $INTEL MB |
+          | \`HuddleOwl-$V-win-x64.exe\` | Windows 10 and 11, x64 | $WIN MB |
 
           \`SHA256SUMS.txt\` covers all three. To check one:
           \`shasum -a 256 -c SHA256SUMS.txt --ignore-missing\`
@@ -116,7 +133,7 @@ jobs:
           **On-device models ship on macOS.** On Windows, HuddleOwl runs against a cloud
           model of your choosing while the local engines are being built.
           EOF
-          cat notes.md
+          cat "$RUNNER_TEMP/notes.md"
 
       - name: Publish the release
         env:
@@ -125,20 +142,49 @@ jobs:
           set -euo pipefail
           if gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "v$V already exists, replacing its files"
-            gh release upload "v$V" out/* --clobber --repo "$GITHUB_REPOSITORY"
-            gh release edit "v$V" --notes-file notes.md --repo "$GITHUB_REPOSITORY"
+            gh release upload "v$V" "$OUT"/* --clobber --repo "$GITHUB_REPOSITORY"
+            gh release edit "v$V" --notes-file "$RUNNER_TEMP/notes.md" --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "v$V" out/* \
+            gh release create "v$V" "$OUT"/* \
               --repo "$GITHUB_REPOSITORY" \
               --title "HuddleOwl $V" \
-              --notes-file notes.md
+              --notes-file "$RUNNER_TEMP/notes.md"
           fi
           echo "Published: https://github.com/$GITHUB_REPOSITORY/releases/tag/v$V"
 
-      - name: Confirm the website's four download paths will resolve
+      # The README's download buttons are versioned URLs, which is what makes a
+      # click start the .dmg rather than open a page about it. The cost of that
+      # is that they rot the moment a new build ships, so they are rewritten
+      # here rather than left to be remembered.
+      - name: Point the README at the new version
+        env:
+          ARM: ${{ steps.sizes.outputs.arm }}
+        run: |
+          set -euo pipefail
+          sed -E -i \
+            -e "s#/releases/download/v[0-9]+\.[0-9]+\.[0-9]+/#/releases/download/v$V/#g" \
+            -e "s#HuddleOwl-[0-9]+\.[0-9]+\.[0-9]+-arm64\.dmg#HuddleOwl-$V-arm64.dmg#g" \
+            -e "s#HuddleOwl-[0-9]+\.[0-9]+\.[0-9]+-win-x64\.exe#HuddleOwl-$V-win-x64.exe#g" \
+            -e "s#HuddleOwl-[0-9]+\.[0-9]+\.[0-9]+\.dmg#HuddleOwl-$V.dmg#g" \
+            -e "s#Apple Silicon, [0-9]+ MB#Apple Silicon, $ARM MB#g" \
+            README.md
+          if git diff --quiet -- README.md; then
+            echo "README was already pointing at $V"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Point the downloads at $V" -- README.md
+          git push
+
+      - name: Confirm every advertised file exists
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh release view "v$V" --repo "$GITHUB_REPOSITORY" --json assets \
-            --jq '.assets[].name' | sort | tee /dev/stderr | grep -qx "SHA256SUMS.txt"
+          gh release view "v$V" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | sort > "$RUNNER_TEMP/have.txt"
+          cat "$RUNNER_TEMP/have.txt"
+          for f in "HuddleOwl-$V-arm64.dmg" "HuddleOwl-$V.dmg" "HuddleOwl-$V-win-x64.exe" SHA256SUMS.txt; do
+            grep -qx "$f" "$RUNNER_TEMP/have.txt" || { echo "::error::$f did not make it onto the release"; exit 1; }
+          done
+          echo "All four files are on v$V."
