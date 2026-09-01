@@ -4,11 +4,13 @@
 
 # HuddleOwl
 
-### The AI meeting coach that runs on your own machine.
+### The only AI meeting assistant that helps you win the call while you are still in it.
 
-**It coaches you through the call, then scores how you ran it, quoting the line from the transcript that earned every score.**
+**A card appears while you are still talking, quoting the line that triggered it: the objection you talked past, the question you skipped, the buying signal you missed. Then a scored review of how you ran it, about forty seconds after you hang up.**
 
-No bot joins the call. No account, no sign up. On a Mac with the on-device models, nothing leaves your laptop at all.
+Every other tool in this category tells you afterwards. By then it is a transcript, not a chance.
+
+Nothing joins the call. No account, no sign up. On a Mac with the on-device models, nothing leaves your laptop at all.
 
 <br/>
 
@@ -16,6 +18,7 @@ No bot joins the call. No account, no sign up. On a Mac with the on-device model
 ![Windows](https://img.shields.io/badge/Windows-10+-07080B?style=for-the-badge&logo=windows&logoColor=00E5FF)
 ![Free](https://img.shields.io/badge/FREE-FOR%20INDIVIDUALS-CCFF00?style=for-the-badge&labelColor=07080B)
 ![On device](https://img.shields.io/badge/100%25-ON--DEVICE-00E5FF?style=for-the-badge&labelColor=07080B)
+![Live coaching](https://img.shields.io/badge/COACHES-DURING%20THE%20CALL-CCFF00?style=for-the-badge&labelColor=07080B)
 
 <br/>
 
