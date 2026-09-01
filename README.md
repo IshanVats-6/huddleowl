@@ -8,6 +8,22 @@ on the website have a public place to point at while the application's own
 repository stays private. Every file here is attached to a
 [release](../../releases).
 
+## Publishing a build
+
+Actions, **Publish a build**, Run workflow. Give it the version (`0.1.9`) and the
+tag in the app repo to take the files from (`dev-latest`). It pulls the three
+installers, writes `SHA256SUMS.txt` and publishes the release, all inside
+GitHub's network, in under a minute.
+
+It needs one secret, once: a fine-grained personal access token with
+**Contents: Read-only** on `IshanVats-6/huddleowl` and nothing else, saved here
+under Settings, Secrets and variables, Actions, as `APP_REPO_TOKEN`. The setup
+notes at the top of `.github/workflows/mirror-release.yml` spell it out.
+
+After publishing a new version, update the tag and the three filenames in
+`netlify.toml` in the website repository. That is the only other place a version
+number appears.
+
 ## Get the app
 
 Use the buttons on the website rather than these files directly. They always

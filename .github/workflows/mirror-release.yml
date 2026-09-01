@@ -1,0 +1,144 @@
+# Copies a finished build out of the private application repository and
+# publishes it here, where the website's download buttons can reach it.
+#
+# WHY A WORKFLOW RATHER THAN A MANUAL UPLOAD. The installers are about 470 MB
+# together. Doing this by hand means downloading all of it and uploading all of
+# it again over a home connection. Here both hops happen inside GitHub's own
+# network and the whole thing takes under a minute.
+#
+# ONE-TIME SETUP. This needs to read a private repository, which the automatic
+# GITHUB_TOKEN cannot do, so it uses a token you create:
+#
+#   1. github.com/settings/personal-access-tokens/new
+#   2. Repository access: Only select repositories, and pick IshanVats-6/huddleowl
+#   3. Permissions: Contents, Read-only. Nothing else.
+#   4. Save it in THIS repository under Settings, Secrets and variables,
+#      Actions, as APP_REPO_TOKEN.
+#
+# Read-only on one repository is the whole grant. Publishing here uses the
+# workflow's own token, which never leaves this repository.
+
+name: Publish a build
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish, without the v. For example 0.1.9"
+        required: true
+        type: string
+      source_tag:
+        description: "The release in the app repo to take the files from"
+        required: true
+        default: dev-latest
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      V: ${{ inputs.version }}
+      SOURCE_REPO: IshanVats-6/huddleowl
+
+    steps:
+      - name: Fetch the installers from the app repo
+        env:
+          GH_TOKEN: ${{ secrets.APP_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::APP_REPO_TOKEN is not set. See the setup notes at the top of this workflow."
+            exit 1
+          fi
+          mkdir -p out
+          gh release download "${{ inputs.source_tag }}" \
+            --repo "$SOURCE_REPO" \
+            --dir out \
+            --pattern "HuddleOwl-$V-arm64.dmg" \
+            --pattern "HuddleOwl-$V.dmg" \
+            --pattern "HuddleOwl-$V-win-x64.exe"
+
+      - name: Check all three arrived
+        run: |
+          set -euo pipefail
+          cd out
+          missing=0
+          for f in "HuddleOwl-$V-arm64.dmg" "HuddleOwl-$V.dmg" "HuddleOwl-$V-win-x64.exe"; do
+            if [ ! -s "$f" ]; then
+              echo "::error::$f is missing or empty in $SOURCE_REPO at ${{ inputs.source_tag }}"
+              missing=1
+            fi
+          done
+          # A partial release is worse than none: the website would offer three
+          # buttons and one of them would 404.
+          exit $missing
+
+      - name: Write the checksums
+        run: |
+          set -euo pipefail
+          cd out
+          sha256sum "HuddleOwl-$V-arm64.dmg" "HuddleOwl-$V.dmg" "HuddleOwl-$V-win-x64.exe" > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Write the release notes
+        run: |
+          set -euo pipefail
+          size() { du -m "out/$1" | cut -f1; }
+          cat > notes.md <<EOF
+          HuddleOwl $V, for macOS and Windows.
+
+          Free for individuals. No account, no card, no sign up. The download buttons on
+          [huddleowl.com](https://huddleowl.com) point here.
+
+          | File | Platform | Size |
+          |---|---|---|
+          | \`HuddleOwl-$V-arm64.dmg\` | Apple Silicon Mac, macOS 11+ | $(size "HuddleOwl-$V-arm64.dmg") MB |
+          | \`HuddleOwl-$V.dmg\` | Intel Mac, macOS 11+ | $(size "HuddleOwl-$V.dmg") MB |
+          | \`HuddleOwl-$V-win-x64.exe\` | Windows 10 and 11, x64 | $(size "HuddleOwl-$V-win-x64.exe") MB |
+
+          \`SHA256SUMS.txt\` covers all three. To check one:
+          \`shasum -a 256 -c SHA256SUMS.txt --ignore-missing\`
+
+          **First launch on macOS.** HuddleOwl is not notarised with Apple yet, which is a
+          signing formality rather than anything about the build. macOS will say the app is
+          damaged. Run \`xattr -cr /Applications/HuddleOwl.app\` once, then open it again.
+
+          **Windows.** The build is unsigned, so SmartScreen asks once. Choose More info,
+          then Run anyway.
+
+          **On-device models ship on macOS.** On Windows, HuddleOwl runs against a cloud
+          model of your choosing while the local engines are being built.
+          EOF
+          cat notes.md
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "v$V already exists, replacing its files"
+            gh release upload "v$V" out/* --clobber --repo "$GITHUB_REPOSITORY"
+            gh release edit "v$V" --notes-file notes.md --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "v$V" out/* \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "HuddleOwl $V" \
+              --notes-file notes.md
+          fi
+          echo "Published: https://github.com/$GITHUB_REPOSITORY/releases/tag/v$V"
+
+      - name: Confirm the website's four download paths will resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release view "v$V" --repo "$GITHUB_REPOSITORY" --json assets \
+            --jq '.assets[].name' | sort | tee /dev/stderr | grep -qx "SHA256SUMS.txt"
