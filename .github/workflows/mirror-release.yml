@@ -125,6 +125,10 @@ jobs:
 
           Free for individuals. No account, no card, no sign up.
 
+          **New here?** [Setup takes two minutes](https://huddleowl.com/setup?src=release),
+          and one macOS permission is worth reading about before you hit it. You can have
+          that page and a note when the next build ships sent to you from there.
+
           | File | Platform | Size |
           |---|---|---|
           | \`HuddleOwl-$V-arm64.dmg\` | Apple Silicon Mac, macOS 11+ | $ARM MB |
@@ -143,6 +147,13 @@ jobs:
 
           **On-device models ship on macOS.** On Windows, HuddleOwl runs against a cloud
           model of your choosing while the local engines are being built.
+
+          ---
+
+          Built by [Ishan Vats](https://www.linkedin.com/in/vatsishan/) at
+          [IV Consulting](https://ivconsulting.in/), where we build AI products and AI
+          systems for other people too. If you want something like this for your own
+          business, that is the conversation to start.
           EOF
           cat "$RUNNER_TEMP/notes.md"
 

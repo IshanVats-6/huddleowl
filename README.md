@@ -206,10 +206,26 @@ It is built on other people's work, nearly all of it under permissive licences t
 
 Found a bug, or want something it does not do yet? [Open an issue](../../issues). Every one of them is read.
 
+## Who builds this
+
+HuddleOwl is a product of **[IV Consulting](https://ivconsulting.in/)**, built by
+**[Ishan Vats](https://www.linkedin.com/in/vatsishan/)**, who runs it.
+
+IV Consulting builds AI products and AI systems for other companies: the same work that
+went into this, applied to whatever your business actually does. HuddleOwl is the version
+of it we happened to need ourselves, so it is a fair sample of the standard. On-device
+models, a real product rather than a demo, and every claim on this page checkable.
+
+If you want something like this built for you, or you have a process that should be a
+system, that is the conversation to start. [ivconsulting.in](https://ivconsulting.in/), or
+find Ishan on [LinkedIn](https://www.linkedin.com/in/vatsishan/).
+
 <div align="center">
 <br/>
 
 **If HuddleOwl catches something on your next call that you would have missed, a star helps the next person find it.**
+
+<sub>Built by <a href="https://www.linkedin.com/in/vatsishan/">Ishan Vats</a> at <a href="https://ivconsulting.in/">IV Consulting</a>.</sub>
 
 <br/>
 </div>
