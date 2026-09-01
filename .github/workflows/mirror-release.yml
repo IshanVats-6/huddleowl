@@ -47,12 +47,18 @@ jobs:
     env:
       V: ${{ inputs.version }}
       SOURCE_REPO: IshanVats-6/huddleowl
-      # Downloads live outside the checkout, so a half-finished run can never
-      # leave 470 MB of installers staged for commit.
-      OUT: ${{ runner.temp }}/out
 
     steps:
       - uses: actions/checkout@v4
+
+      # Downloads live outside the checkout, so a half-finished run can never
+      # leave 470 MB of installers staged for commit.
+      #
+      # This is a step rather than a job-level `env:` entry because the runner
+      # context does not exist yet when job-level env is evaluated, and naming
+      # it there fails the whole workflow before a single job starts.
+      - name: Decide where the downloads land
+        run: echo "OUT=$RUNNER_TEMP/out" >> "$GITHUB_ENV"
 
       - name: Fetch the installers from the app repo
         env:
