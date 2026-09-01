@@ -98,14 +98,19 @@ jobs:
           sha256sum "HuddleOwl-$V-arm64.dmg" "HuddleOwl-$V.dmg" "HuddleOwl-$V-win-x64.exe" > SHA256SUMS.txt
           cat SHA256SUMS.txt
 
+      # Rounded MiB from the byte count, not `du -m`. du rounds UP and counts
+      # blocks, so it called the same file 165 MB while the website called it
+      # 164, and one number being wrong is less bad than two numbers disagreeing
+      # about the same download. The site rounds the byte count the same way.
       - name: Measure the files
         id: sizes
         run: |
           set -euo pipefail
+          mib() { echo $(( ($(stat -c%s "$1") + 524288) / 1048576 )); }
           {
-            echo "arm=$(du -m "$OUT/HuddleOwl-$V-arm64.dmg" | cut -f1)"
-            echo "intel=$(du -m "$OUT/HuddleOwl-$V.dmg" | cut -f1)"
-            echo "win=$(du -m "$OUT/HuddleOwl-$V-win-x64.exe" | cut -f1)"
+            echo "arm=$(mib "$OUT/HuddleOwl-$V-arm64.dmg")"
+            echo "intel=$(mib "$OUT/HuddleOwl-$V.dmg")"
+            echo "win=$(mib "$OUT/HuddleOwl-$V-win-x64.exe")"
           } >> "$GITHUB_OUTPUT"
 
       - name: Write the release notes
@@ -182,6 +187,32 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Point the downloads at $V" -- README.md
           git push
+
+      # The website asks GitHub for the latest release at BUILD time, so it only
+      # learns about this one when it next builds. Without this it would go on
+      # offering the previous version until something else happened to trigger a
+      # deploy, which is the failure this whole chain is meant to remove.
+      #
+      # Optional: set NETLIFY_BUILD_HOOK in this repository's Actions secrets to
+      # the build hook URL from Netlify, Site configuration, Build and deploy,
+      # Build hooks. Without it the release still publishes and the site simply
+      # updates on its next deploy.
+      - name: Ask the website to rebuild
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HOOK:-}" ]; then
+            echo "::notice::NETLIFY_BUILD_HOOK is not set, so huddleowl.com will pick up $V on its next deploy."
+            exit 0
+          fi
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST -d '{}' "$HOOK")
+          # A failed rebuild must not fail a release that has already published.
+          if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+            echo "Asked Netlify to rebuild (HTTP $code)."
+          else
+            echo "::warning::Netlify build hook answered HTTP $code. Trigger a deploy by hand so the site offers $V."
+          fi
 
       - name: Confirm every advertised file exists
         env:

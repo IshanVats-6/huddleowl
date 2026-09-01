@@ -213,8 +213,8 @@ Found a bug, or want something it does not do yet? [Open an issue](../../issues)
 
 Actions, **Publish a build**, Run workflow. Give it the version (`0.1.9`) and the release in the app repo to take the files from (`dev-latest`). It pulls the three installers, writes `SHA256SUMS.txt`, publishes the release, and rewrites the version everywhere in this README, all inside GitHub's network.
 
-It needs one secret, once: a fine-grained personal access token with **Contents: Read-only** on the app repository and nothing else, saved here under Settings, Secrets and variables, Actions, as `APP_REPO_TOKEN`. The setup notes at the top of `.github/workflows/mirror-release.yml` spell it out.
+It needs one secret, once: a fine-grained personal access token with **Contents: Read-only** on `huddleowl-app` and nothing else, saved here under Settings, Secrets and variables, Actions, as `APP_REPO_TOKEN`. The setup notes at the top of `.github/workflows/mirror-release.yml` spell it out.
 
-After publishing, update the tag and the three filenames in `netlify.toml` in the website repository. That is the only other place a version number appears.
+Nothing has to be edited afterwards. huddleowl.com asks this repository for its latest release at build time and derives the version, the three links and the three file sizes from the answer, and the last step of the workflow pokes Netlify to rebuild. Set `NETLIFY_BUILD_HOOK` here to make that immediate; without it the site picks the new version up on its next deploy.
 
 </details>
