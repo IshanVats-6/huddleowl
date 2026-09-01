@@ -234,7 +234,7 @@ find Ishan on [LinkedIn](https://www.linkedin.com/in/vatsishan/).
 <summary><b>Publishing a build (maintainers)</b></summary>
 <br/>
 
-Actions, **Publish a build**, Run workflow. Give it the version (`0.1.9`) and the release in the app repo to take the files from (`dev-latest`). It pulls the three installers, writes `SHA256SUMS.txt`, publishes the release, and rewrites the version everywhere in this README, all inside GitHub's network.
+Actions, **Publish a build**, Run workflow. Give it the version you are shipping (`0.2.1`, say) and the release in the app repo to take the files from (`dev-latest`). It pulls the three installers, writes `SHA256SUMS.txt`, publishes the release, and rewrites the version everywhere in this README, all inside GitHub's network.
 
 It needs one secret, once: a fine-grained personal access token with **Contents: Read-only** on `huddleowl-app` and nothing else, saved here under Settings, Secrets and variables, Actions, as `APP_REPO_TOKEN`. The setup notes at the top of `.github/workflows/mirror-release.yml` spell it out.
 
