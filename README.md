@@ -197,6 +197,8 @@ Yes. Drop in an audio file and it comes back with the same transcript, the same 
 
 This repository holds the installers and nothing else. It exists so that downloads have a public home while the application's own source stays private. Everything here is attached to a [release](../../releases).
 
+HuddleOwl is built on other people's work, nearly all of it under permissive licences that ask only that their copyright notice travels with the binary. Every bundled component, its licence and its copyright holder are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), generated from the real dependency metadata rather than written by hand.
+
 Found a bug, or want something it does not do yet? [Open an issue](../../issues). Every one of them is read.
 
 <div align="center">
