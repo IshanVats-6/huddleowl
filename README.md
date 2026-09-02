@@ -22,9 +22,9 @@ Nothing joins the call. No account, no sign up. On a Mac with the on-device mode
 
 <br/>
 
-### [&nbsp;&nbsp;**DOWNLOAD FOR MAC**&nbsp;&nbsp;](https://github.com/IshanVats-6/huddleowl/releases/download/v0.2.0/HuddleOwl-0.2.0-arm64.dmg)
+### [&nbsp;&nbsp;**DOWNLOAD FOR MAC**&nbsp;&nbsp;](https://github.com/IshanVats-6/huddleowl/releases/download/v0.3.0/HuddleOwl-0.3.0-arm64.dmg)
 
-<sub>Apple Silicon, 164 MB&nbsp; · &nbsp;[Intel Mac](https://github.com/IshanVats-6/huddleowl/releases/download/v0.2.0/HuddleOwl-0.2.0.dmg)&nbsp; · &nbsp;[Windows](https://github.com/IshanVats-6/huddleowl/releases/download/v0.2.0/HuddleOwl-0.2.0-win-x64.exe)&nbsp; · &nbsp;[All files and checksums](https://github.com/IshanVats-6/huddleowl/releases/latest)</sub>
+<sub>Apple Silicon, 164 MB&nbsp; · &nbsp;[Intel Mac](https://github.com/IshanVats-6/huddleowl/releases/download/v0.3.0/HuddleOwl-0.3.0.dmg)&nbsp; · &nbsp;[Windows](https://github.com/IshanVats-6/huddleowl/releases/download/v0.3.0/HuddleOwl-0.3.0-win-x64.exe)&nbsp; · &nbsp;[All files and checksums](https://github.com/IshanVats-6/huddleowl/releases/latest)</sub>
 
 <br/>
 
@@ -131,7 +131,7 @@ Every release carries `SHA256SUMS.txt`.
 shasum -a 256 -c SHA256SUMS.txt --ignore-missing
 
 # Windows
-certutil -hashfile HuddleOwl-0.2.0-win-x64.exe SHA256
+certutil -hashfile HuddleOwl-0.3.0-win-x64.exe SHA256
 ```
 
 ---
