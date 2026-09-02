@@ -1,22 +1,22 @@
 # The Sponsor button on this repository.
 #
-# EVERY LINE IS COMMENTED OUT ON PURPOSE, and the file is here anyway. GitHub
-# renders a Sponsor button the moment one of these is uncommented, and a button
-# that leads nowhere is worse than no button: github.com/sponsors/IshanVats-6 is
-# not an active sponsors profile yet, so a `github:` line today would put a link
-# to a 404 at the top of the page people arrive at to download the app.
+# GitHub renders the button from this file alone. There is no repository
+# setting to flip, but the file has to be at .github/FUNDING.yml on the default
+# branch or nothing appears.
 #
-# TO TURN IT ON, uncomment one line.
+# Both keys can be set at once, and the button then opens a menu.
 #
-#   github     needs enrolment at github.com/sponsors first: identity
-#              verification, payout setup and tax forms, which takes days. It is
-#              the one that supports recurring monthly sponsorship, which is
-#              where open-source funding actually comes from.
+#   custom     any URL, live the moment it merges. Nothing to enrol in.
 #
-#   custom     any URL, live immediately. A Razorpay page, Ko-fi, Polar, or a
-#              pricing page. Nothing to enrol in and nothing to wait for.
-#
-# Both can be set at once, and the button opens a menu.
+#   github     needs an approved and PUBLISHED GitHub Sponsors profile. Being
+#              accepted to the programme is not enough on its own: until tiers
+#              are published the profile is not public, and a github: line
+#              would put a dead link at the top of the page people arrive at to
+#              download the app. Uncomment it once
+#              github.com/sponsors/IshanVats-6 loads for a signed out visitor.
+#              It is the one that carries recurring monthly sponsorship, which
+#              is where open source funding actually comes from.
+
+custom: ["https://huddleowl.com/support"]
 
 # github: [IshanVats-6]
-# custom: ["https://huddleowl.com/pricing"]
