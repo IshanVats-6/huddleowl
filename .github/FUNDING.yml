@@ -2,21 +2,20 @@
 #
 # GitHub renders the button from this file alone. There is no repository
 # setting to flip, but the file has to be at .github/FUNDING.yml on the default
-# branch or nothing appears.
+# branch or nothing appears. With both keys set the button opens a menu.
 #
-# Both keys can be set at once, and the button then opens a menu.
+#   github     the recurring one. Monthly sponsorship, no platform fee on a
+#              personal account, and it shows publicly on the profile. Card
+#              only, billed in USD, and the payer needs a GitHub account.
 #
-#   custom     any URL, live the moment it merges. Nothing to enrol in.
+#   custom     the support page, which carries a Razorpay button. It is here
+#              because it is the only one of the two that takes UPI, and for an
+#              Indian supporter that is one tap against typing card details for
+#              a foreign currency charge.
 #
-#   github     needs an approved and PUBLISHED GitHub Sponsors profile. Being
-#              accepted to the programme is not enough on its own: until tiers
-#              are published the profile is not public, and a github: line
-#              would put a dead link at the top of the page people arrive at to
-#              download the app. Uncomment it once
-#              github.com/sponsors/IshanVats-6 loads for a signed out visitor.
-#              It is the one that carries recurring monthly sponsorship, which
-#              is where open source funding actually comes from.
+# Both are live. Neither should be uncommented before its destination loads for
+# a signed out visitor: a dead link at the top of the page people arrive at to
+# download the app is worse than no button at all.
 
+github: [IshanVats-6]
 custom: ["https://huddleowl.com/support"]
-
-# github: [IshanVats-6]
