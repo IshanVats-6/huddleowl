@@ -1,0 +1,79 @@
+name: Something is broken
+description: A crash, a hang, or something that does not do what it says
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: if this is a question rather than a fault, please use
+        [Discussions](https://github.com/IshanVats-6/huddleowl/discussions)
+        instead. You will get a faster answer there and it stays findable for
+        the next person.
+
+        The three most common problems already have answers:
+        [macOS says the app is damaged](https://huddleowl.com/guides/install-macos),
+        [SmartScreen blocked the installer](https://huddleowl.com/guides/install-windows),
+        [the system audio permission](https://huddleowl.com/guides/system-audio).
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+      placeholder: |
+        I clicked Analyze now on a 40 minute meeting and the brief never
+        appeared. The spinner ran for about ten minutes and then stopped.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: HuddleOwl version
+      description: Settings, Updates. Or the version on the dmg or exe you installed.
+      placeholder: "0.2.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS on Apple silicon
+        - macOS on Intel
+        - Windows 11
+        - Windows 10
+    validations:
+      required: true
+
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Which engine was running
+      description: Settings, Engine. This is the single most useful field on this form.
+      options:
+        - On-device models
+        - A cloud model
+        - Not sure
+        - Not relevant to this problem
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Anything the app said
+      description: |
+        Error text, or the last few lines from the log folder you can open from
+        Settings, Data and health. Read it before pasting: transcripts are your
+        meetings, and nobody needs your client's name in a public issue.
+      render: text
+
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: One check
+      options:
+        - label: I looked at the guides above and this is not one of those three
+          required: true

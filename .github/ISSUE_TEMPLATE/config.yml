@@ -1,0 +1,14 @@
+# Bugs are the only thing this tracker is for. Everything else has a better
+# home, and the point of these links is to be more attractive than opening a
+# blank issue.
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://github.com/IshanVats-6/huddleowl/discussions/categories/q-a
+    about: How do I, why does it, is this possible. Answered faster here, and it stays findable.
+  - name: Request a feature
+    url: https://github.com/IshanVats-6/huddleowl/discussions/categories/ideas
+    about: Ideas are voted on, and the votes are genuinely how the next thing gets picked.
+  - name: Installation trouble
+    url: https://huddleowl.com/setup
+    about: The macOS warning, SmartScreen, and the system audio permission are all covered here.
