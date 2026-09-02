@@ -1,0 +1,83 @@
+# Records how many times each installer has been downloaded, once a day.
+#
+# WHY THIS HAS TO EXIST. GitHub stores a download count as a single live
+# integer on the asset. There is no history, no per-day breakdown, no export,
+# and no API that answers "how many last week". Worse, the number is destroyed
+# with the asset: prune an old release to tidy up and its entire download
+# history is gone with no undo.
+#
+# So the counter has to be sampled to become data. This appends a row per
+# asset per day, which turns a running total into a curve and keeps the record
+# even after an asset is deleted.
+#
+# The counts are already public on each release page, so nothing here is
+# disclosed that was not already visible.
+
+name: Record download counts
+
+on:
+  schedule:
+    # 04:17 UTC. Deliberately not on the hour: GitHub's scheduler is heavily
+    # congested at :00 and delays runs by many minutes.
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: download-stats
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read today's counts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          DATE=$(date -u +%F)
+          echo "DATE=$DATE" >> "$GITHUB_ENV"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases" \
+            --jq '.[] | .tag_name as $t | .assets[] | [$t, .name, .download_count] | @csv' \
+            | sed "s/^/\"$DATE\",/" > "$RUNNER_TEMP/today.csv"
+          echo "Rows read: $(wc -l < "$RUNNER_TEMP/today.csv")"
+          cat "$RUNNER_TEMP/today.csv"
+
+      - name: Append to the record
+        run: |
+          set -euo pipefail
+          OUT=docs/downloads.csv
+
+          # No rows means the API answered but told us nothing, which is a
+          # blip rather than a day with zero downloads. Writing it would put a
+          # hole in the series, so leave the file alone.
+          if [ ! -s "$RUNNER_TEMP/today.csv" ]; then
+            echo "::warning::No release assets came back, leaving $OUT untouched."
+            exit 0
+          fi
+
+          mkdir -p docs
+          [ -f "$OUT" ] || echo "date,tag,asset,downloads" > "$OUT"
+
+          # Drop any rows already carrying today's date before appending, so a
+          # manual re-run corrects the day instead of double-counting it. The
+          # header has no leading quote, so it survives this.
+          grep -v "^\"$DATE\"," "$OUT" > "$RUNNER_TEMP/kept.csv" || true
+          cat "$RUNNER_TEMP/kept.csv" "$RUNNER_TEMP/today.csv" > "$OUT"
+
+      - name: Commit if anything moved
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/downloads.csv; then
+            echo "No change since the last run."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Record download counts for $DATE" -- docs/downloads.csv
+          git push
