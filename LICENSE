@@ -1,67 +1,45 @@
 HuddleOwl end user licence
 Copyright (c) 2026 Ishan Vats. All rights reserved.
 
-WHY THIS IS NOT AN MIT LICENCE. This repository holds compiled installers, not
-source code, and HuddleOwl is not open source. Putting an MIT licence here would
-say the application may be copied, modified and redistributed by anyone, which
-is not true and would contradict the licence key the paid tier is sold under.
+WHY THIS IS NOT AN MIT LICENCE. This repository holds compiled installers, not source code, and HuddleOwl is not open source. Putting an MIT licence here would say the application may be copied, modified and redistributed by anyone, which is not true and would contradict the licence key the paid tier is sold under.
 What follows is what you may actually do.
 
-The third-party components bundled inside the installers keep their own
-licences, which are permissive and are reproduced in full in
-THIRD-PARTY-NOTICES.md in this repository. Nothing here changes those terms, and
-nothing in those terms changes these.
+The third-party components bundled inside the installers keep their own licences, which are permissive and are reproduced in full in THIRD-PARTY-NOTICES.md in this repository. Nothing here changes those terms, and nothing in those terms changes these.
 
 1. WHAT YOU MAY DO
 
-   Download, install and use HuddleOwl on machines you control. Use it for work,
-   including commercial work. Run it for as long as you like.
+   Download, install and use HuddleOwl on machines you control. Use it for work, including commercial work. Run it for as long as you like.
 
-   Individual use of the on-device features is free, with no account and no
-   payment. The cloud engines require a paid licence key.
+   Individual use of the on-device features is free, with no account and no payment. The cloud engines require a paid licence key.
 
-   Recommend it, write about it, link to it, and link people to this repository
-   to download it.
+   Recommend it, write about it, link to it, and link people to this repository to download it.
 
 2. WHAT YOU MAY NOT DO
 
-   Redistribute, resell or rehost the installers, or charge anyone for access to
-   them. Point people at this repository instead, so they get a build that has
-   not been modified.
+   Redistribute, resell or rehost the installers, or charge anyone for access to them. Point people at this repository instead, so they get a build that has not been modified.
 
    Rebrand the application or present it as your own product.
 
    Remove or alter the third-party notices that ship with it.
 
-   Reverse engineer, decompile or disassemble the application, except where that
-   right cannot be excluded by law that applies to you.
+   Reverse engineer, decompile or disassemble the application, except where that right cannot be excluded by law that applies to you.
 
    Share a licence key with anyone outside the seat it was bought for.
 
-   To deploy HuddleOwl across an organisation, ask. That is a conversation
-   rather than a refusal: hello@huddleowl.com.
+   To deploy HuddleOwl across an organisation, ask. That is a conversation rather than a refusal: hello@huddleowl.com.
 
 3. NO WARRANTY
 
-   HuddleOwl is provided "as is", without warranty of any kind, express or
-   implied, including but not limited to the warranties of merchantability,
-   fitness for a particular purpose and noninfringement.
+   HuddleOwl is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
 
-   Coaching cues and scores are a model's opinion about a conversation, and they
-   are wrong sometimes. Do not treat the output as a system of record, a legal
-   record, or a performance assessment of anybody.
+   Coaching cues and scores are a model's opinion about a conversation, and they are wrong sometimes. Do not treat the output as a system of record, a legal record, or a performance assessment of anybody.
 
 4. RECORDING IS YOUR RESPONSIBILITY
 
-   HuddleOwl records audio on your machine at your instruction. Consent and
-   recording law vary by country, and by state or province within several of
-   them. Following the law where you and the other participants are is yours to
-   do, not ours.
+   HuddleOwl records audio on your machine at your instruction. Consent and recording law vary by country, and by state or province within several of them. Following the law where you and the other participants are is yours to do, not ours.
 
 5. LIABILITY
 
-   In no event shall the author be liable for any claim, damages or other
-   liability, whether in an action of contract, tort or otherwise, arising from,
-   out of or in connection with the software or its use.
+   In no event shall the author be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or its use.
 
 The current version of these terms is published at https://huddleowl.com/terms.
