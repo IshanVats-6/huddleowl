@@ -139,8 +139,9 @@ jobs:
           \`shasum -a 256 -c SHA256SUMS.txt --ignore-missing\`
 
           **First launch on macOS.** Signed with an Apple Developer ID and notarised by
-          Apple, so it opens like any other Mac app. Nothing to clear and nothing to paste
-          into Terminal.
+          Apple. macOS asks once whether you are sure, as it does for anything downloaded,
+          and says Apple checked the file and found nothing. Click Open. It never asks
+          again, and nothing goes into Terminal.
 
           **Windows.** The build is unsigned, so SmartScreen asks once. Choose More info,
           then Run anyway.

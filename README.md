@@ -109,9 +109,9 @@ Prefer a cloud model anyway? Point it at over 100 providers or at your own endpo
 
 1. Download the build for your chip. Apple Silicon is the big link above; there is a separate Intel build beside it.
 2. Open the `.dmg` and drag HuddleOwl into Applications.
-3. Open it. That is the whole thing.
+3. Open it. macOS asks once whether you are sure, the way it does for anything you download, and tells you Apple checked the file and found nothing. Click **Open**. It never asks again.
 
-HuddleOwl is signed with an Apple Developer ID and notarised by Apple from 0.4.0 onwards, so macOS opens it like any other app. No Terminal, no warning to click through.
+HuddleOwl is signed with an Apple Developer ID and notarised by Apple from 0.4.0 onwards. That one dialog with an Open button is the whole of it, and nothing goes into Terminal.
 
 If you are on 0.3.0 or earlier, those builds were not notarised and macOS called them damaged. `xattr -cr /Applications/HuddleOwl.app` was the fix; downloading the current build is the better one.
 
