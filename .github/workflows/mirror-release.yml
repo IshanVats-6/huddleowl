@@ -138,9 +138,9 @@ jobs:
           \`SHA256SUMS.txt\` covers all three. To check one:
           \`shasum -a 256 -c SHA256SUMS.txt --ignore-missing\`
 
-          **First launch on macOS.** HuddleOwl is not notarised with Apple yet, which is a
-          signing formality rather than anything about the build. macOS will say the app is
-          damaged. Run \`xattr -cr /Applications/HuddleOwl.app\` once, then open it again.
+          **First launch on macOS.** Signed with an Apple Developer ID and notarised by
+          Apple, so it opens like any other Mac app. Nothing to clear and nothing to paste
+          into Terminal.
 
           **Windows.** The build is unsigned, so SmartScreen asks once. Choose More info,
           then Run anyway.
